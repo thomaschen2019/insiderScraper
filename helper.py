@@ -39,7 +39,7 @@ def find_all_reports_today():
 def find_all_xml(reports_web_link):
     xml_reports_link = []
     for link in reports_web_link:
-        print("Getting ", link)
+        #print("Getting ", link)
         url = 'https://sec.gov'+link
         html = urlopen(url)
         bsObj = BeautifulSoup(html.read())
@@ -82,23 +82,23 @@ def get_filing_data(xml_reports_link):
                 print("Error Finding Transaction Type")
                 trans_type = None
             try:
-                all_trans.append({'ticker':symbol, 
-                                  'trans_date':trans.transactiondate.value.string,
-                                  'price':float(trans.transactionpricepershare.value.string),
-                                  'num_shares':int(float(trans.transactionshares.value.string)),
-                                  'direction':trans.transactionacquireddisposedcode.value.string,
-                                  'trans_type': trans_type,
-                                  'name':name,
-                                  'position':title,
-                                  'isdirector': owner.isdirector.text,
-                                  'isofficer': owner.isofficer.text,
-                                  'ismajor':owner.istenpercentowner.text,
-                                  'isother': owner.isother.text,
-                                  'owned_shares': int(float(trans.sharesownedfollowingtransaction.value.string)),})
-                ct = ct + 1
+            	all_trans.append({'ticker':symbol, 
+            		'trans_date':trans.transactiondate.value.string,
+            		'price':float(trans.transactionpricepershare.value.string),
+            		'num_shares':int(float(trans.transactionshares.value.string)),
+            		'direction':trans.transactionacquireddisposedcode.value.string,
+            		'trans_type': trans_type,
+            		'name':name,
+            		'position':title,
+                              # 'isdirector': owner.isdirector.text,
+                              # 'isofficer': owner.isofficer.text,
+                              # 'ismajor':owner.istenpercentowner.text,
+                              # 'isother': owner.isother.text,
+                              'owned_shares': int(float(trans.sharesownedfollowingtransaction.value.string)),})
+            	ct = ct + 1
             except Exception as e:
-                print("Error {} occured for getting filing data for {}".format(e, symbol))
-                print(url)
+            	print("Error {} occured for getting filing data for {}".format(e, symbol))
+            	print(url)
     print("Total Number of transactions ", ct)
     df = pd.DataFrame(all_trans)
     print(df.shape)
